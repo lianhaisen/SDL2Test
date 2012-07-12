@@ -1,0 +1,277 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		754CEDF015A78E4A00ACA139 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEDEF15A78E4A00ACA139 /* UIKit.framework */; };
+		754CEDF215A78E4A00ACA139 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEDF115A78E4A00ACA139 /* Foundation.framework */; };
+		754CEDF415A78E4A00ACA139 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEDF315A78E4A00ACA139 /* CoreGraphics.framework */; };
+		754CEDFA15A78E4A00ACA139 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 754CEDF815A78E4A00ACA139 /* InfoPlist.strings */; };
+		754CEDFC15A78E4A00ACA139 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 754CEDFB15A78E4A00ACA139 /* main.mm */; };
+		754CEE0D15A78E6300ACA139 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEE0C15A78E6300ACA139 /* libSDL2.a */; };
+		754CEE0F15A78F8900ACA139 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEE0E15A78F8900ACA139 /* OpenGLES.framework */; };
+		754CEE1315A78FFE00ACA139 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEE1215A78FFE00ACA139 /* AudioToolbox.framework */; };
+		754CEE1515A7903100ACA139 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEE1415A7903100ACA139 /* QuartzCore.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		754CEDEB15A78E4A00ACA139 /* SDL2Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDL2Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		754CEDEF15A78E4A00ACA139 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		754CEDF115A78E4A00ACA139 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		754CEDF315A78E4A00ACA139 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		754CEDF715A78E4A00ACA139 /* SDL2Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SDL2Test-Info.plist"; sourceTree = "<group>"; };
+		754CEDF915A78E4A00ACA139 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		754CEDFB15A78E4A00ACA139 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		754CEDFD15A78E4A00ACA139 /* SDL2Test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SDL2Test-Prefix.pch"; sourceTree = "<group>"; };
+		754CEE0C15A78E6300ACA139 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = "../SDL/Xcode-iOS/SDL/build/Release-iphoneos/libSDL2.a"; sourceTree = "<group>"; };
+		754CEE0E15A78F8900ACA139 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		754CEE1015A78FF300ACA139 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		754CEE1215A78FFE00ACA139 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		754CEE1415A7903100ACA139 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		754CEDE815A78E4A00ACA139 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				754CEE1515A7903100ACA139 /* QuartzCore.framework in Frameworks */,
+				754CEE1315A78FFE00ACA139 /* AudioToolbox.framework in Frameworks */,
+				754CEE0F15A78F8900ACA139 /* OpenGLES.framework in Frameworks */,
+				754CEE0D15A78E6300ACA139 /* libSDL2.a in Frameworks */,
+				754CEDF015A78E4A00ACA139 /* UIKit.framework in Frameworks */,
+				754CEDF215A78E4A00ACA139 /* Foundation.framework in Frameworks */,
+				754CEDF415A78E4A00ACA139 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		754CEDE015A78E4A00ACA139 = {
+			isa = PBXGroup;
+			children = (
+				754CEE1415A7903100ACA139 /* QuartzCore.framework */,
+				754CEE1215A78FFE00ACA139 /* AudioToolbox.framework */,
+				754CEE1015A78FF300ACA139 /* CoreAudio.framework */,
+				754CEE0E15A78F8900ACA139 /* OpenGLES.framework */,
+				754CEE0C15A78E6300ACA139 /* libSDL2.a */,
+				754CEDF515A78E4A00ACA139 /* SDL2Test */,
+				754CEDEE15A78E4A00ACA139 /* Frameworks */,
+				754CEDEC15A78E4A00ACA139 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		754CEDEC15A78E4A00ACA139 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				754CEDEB15A78E4A00ACA139 /* SDL2Test.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		754CEDEE15A78E4A00ACA139 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				754CEDEF15A78E4A00ACA139 /* UIKit.framework */,
+				754CEDF115A78E4A00ACA139 /* Foundation.framework */,
+				754CEDF315A78E4A00ACA139 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		754CEDF515A78E4A00ACA139 /* SDL2Test */ = {
+			isa = PBXGroup;
+			children = (
+				754CEDF615A78E4A00ACA139 /* Supporting Files */,
+			);
+			path = SDL2Test;
+			sourceTree = "<group>";
+		};
+		754CEDF615A78E4A00ACA139 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				754CEDF715A78E4A00ACA139 /* SDL2Test-Info.plist */,
+				754CEDF815A78E4A00ACA139 /* InfoPlist.strings */,
+				754CEDFB15A78E4A00ACA139 /* main.mm */,
+				754CEDFD15A78E4A00ACA139 /* SDL2Test-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		754CEDEA15A78E4A00ACA139 /* SDL2Test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 754CEE0915A78E4A00ACA139 /* Build configuration list for PBXNativeTarget "SDL2Test" */;
+			buildPhases = (
+				754CEDE715A78E4A00ACA139 /* Sources */,
+				754CEDE815A78E4A00ACA139 /* Frameworks */,
+				754CEDE915A78E4A00ACA139 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SDL2Test;
+			productName = SDL2Test;
+			productReference = 754CEDEB15A78E4A00ACA139 /* SDL2Test.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		754CEDE215A78E4A00ACA139 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = "Funkitron, Inc.";
+			};
+			buildConfigurationList = 754CEDE515A78E4A00ACA139 /* Build configuration list for PBXProject "SDL2Test" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 754CEDE015A78E4A00ACA139;
+			productRefGroup = 754CEDEC15A78E4A00ACA139 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				754CEDEA15A78E4A00ACA139 /* SDL2Test */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		754CEDE915A78E4A00ACA139 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				754CEDFA15A78E4A00ACA139 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		754CEDE715A78E4A00ACA139 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				754CEDFC15A78E4A00ACA139 /* main.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		754CEDF815A78E4A00ACA139 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				754CEDF915A78E4A00ACA139 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		754CEE0715A78E4A00ACA139 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../SDL/include;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		754CEE0815A78E4A00ACA139 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../SDL/include;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		754CEE0A15A78E4A00ACA139 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SDL2Test/SDL2Test-Prefix.pch";
+				INFOPLIST_FILE = "SDL2Test/SDL2Test-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		754CEE0B15A78E4A00ACA139 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SDL2Test/SDL2Test-Prefix.pch";
+				INFOPLIST_FILE = "SDL2Test/SDL2Test-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		754CEDE515A78E4A00ACA139 /* Build configuration list for PBXProject "SDL2Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				754CEE0715A78E4A00ACA139 /* Debug */,
+				754CEE0815A78E4A00ACA139 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		754CEE0915A78E4A00ACA139 /* Build configuration list for PBXNativeTarget "SDL2Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				754CEE0A15A78E4A00ACA139 /* Debug */,
+				754CEE0B15A78E4A00ACA139 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 754CEDE215A78E4A00ACA139 /* Project object */;
+}
