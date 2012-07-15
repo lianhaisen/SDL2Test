@@ -1,5 +1,5 @@
 //
-//  main.m
+//  main.mm
 //  SDL2Test
 //
 //  Created by David Ludwig on 7/6/12.
@@ -10,6 +10,8 @@
 #include <iostream>
 #include <sstream>
 #import <UIKit/UIKit.h>
+
+#include <boost/format.hpp>
 
 #include <SDL.h>
 
@@ -85,6 +87,48 @@ std::string ConvertSDLWindowFlagsToString(Uint32 flags) {
 	}
 	
 	return result;
+}
+
+std::string ConvertSDLEventTypeToString(Uint32 type) {
+	switch (type) {
+		case SDL_QUIT: return "SDL_QUIT";
+		case SDL_WINDOWEVENT: return "SDL_WINDOWEVENT";
+		case SDL_SYSWMEVENT: return "SDL_SYSWMEVENT";
+		case SDL_KEYDOWN: return "SDL_KEYDOWN";
+		case SDL_KEYUP: return "SDL_KEYUP";
+		case SDL_TEXTEDITING: return "SDL_TEXTEDITING";
+		case SDL_TEXTINPUT: return "SDL_TEXTINPUT";
+		case SDL_MOUSEMOTION: return "SDL_MOUSEMOTION";
+		case SDL_MOUSEBUTTONDOWN: return "SDL_MOUSEBUTTONDOWN";
+		case SDL_MOUSEBUTTONUP: return "SDL_MOUSEBUTTONUP";
+		case SDL_MOUSEWHEEL: return "SDL_MOUSEWHEEL";
+		case SDL_INPUTMOTION: return "SDL_INPUTMOTION";
+		case SDL_INPUTBUTTONDOWN: return "SDL_INPUTBUTTONDOWN";
+		case SDL_INPUTBUTTONUP: return "SDL_INPUTBUTTONUP";
+		case SDL_INPUTWHEEL: return "SDL_INPUTWHEEL";
+		case SDL_INPUTPROXIMITYIN: return "SDL_INPUTPROXIMITYIN";
+		case SDL_INPUTPROXIMITYOUT: return "SDL_INPUTPROXIMITYOUT";
+		case SDL_JOYAXISMOTION: return "SDL_JOYAXISMOTION";
+		case SDL_JOYBALLMOTION: return "SDL_JOYBALLMOTION";
+		case SDL_JOYHATMOTION: return "SDL_JOYHATMOTION";
+		case SDL_JOYBUTTONDOWN: return "SDL_JOYBUTTONDOWN";
+		case SDL_JOYBUTTONUP: return "SDL_JOYBUTTONUP";
+		case SDL_FINGERDOWN: return "SDL_FINGERDOWN";
+		case SDL_FINGERUP: return "SDL_FINGERUP";
+		case SDL_FINGERMOTION: return "SDL_FINGERMOTION";
+		case SDL_TOUCHBUTTONDOWN: return "SDL_TOUCHBUTTONDOWN";
+		case SDL_TOUCHBUTTONUP: return "SDL_TOUCHBUTTONUP";
+		case SDL_DOLLARGESTURE: return "SDL_DOLLARGESTURE";
+		case SDL_DOLLARRECORD: return "SDL_DOLLARRECORD";
+		case SDL_MULTIGESTURE: return "SDL_MULTIGESTURE";
+		case SDL_CLIPBOARDUPDATE: return "SDL_CLIPBOARDUPDATE";
+		case SDL_DROPFILE: return "SDL_DROPFILE";
+		case SDL_USEREVENT: return "SDL_USEREVENT";
+		default:
+		{
+			return (boost::format("<unknown SDL event type: 0x%x>") % type).str();
+		}
+	}
 }
 
 int main(int argc, char *argv[])
@@ -254,6 +298,27 @@ int main(int argc, char *argv[])
 	
 	printf("INFO: The main SDL Window has been created.  (address = 0x%x)\n",
 		   (unsigned int)mainWindow);
+		   
+#pragma mark - Main Loop
+	// Sit in an endless loop, getting + logging events, drawing stuff, etc.
+	printf("INFO: Entering main loop.\n");
+	unsigned long long loopCount = 0;
+	while (true) {
+		// Update the loop count.  This is always done once when the main loop
+		// iterates.
+		++loopCount;
+	
+		// Retrieve all events in SDL's event queue, logging information about
+		// them.
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			std::cout << "INFO: " << ConvertSDLEventTypeToString(event.type) <<
+				" received, loop count=" << loopCount << "\n";
+		}
+		
+		// Wait a bit, just in case the OS needs time to process things.
+		SDL_Delay(1);
+	}
 	
 	return 0;
 }
