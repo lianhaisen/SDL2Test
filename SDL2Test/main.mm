@@ -296,9 +296,29 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	printf("INFO: The main SDL Window has been created.  (address = 0x%x)\n",
+	printf("INFO: The main SDL Window has been created (via SDL_CreateWindow).  (address = 0x%x)\n",
 		   (unsigned int)mainWindow);
-		   
+	
+#pragma mark - GL Context Creation
+	// Creating a GL context (via SDL_GL_CreateContext) and updating its window
+	// (via SDL_GL_SwapWindow) is needed to get events working in an iOS-based
+	// SDL app (as of this writing on July 15, 2012).  This isn't to say there
+	// aren't other ways of getting events working in an SDL + iOS based app,
+	// however the combination of these two calls does work.  Not including
+	// these calls, and only attempting to poll for events (via SDL_PollEvent)
+	// does not work for most event types.  Window events get received, but not
+	// touch events.
+	
+	printf("INFO: Creating GL context (via SDL_GL_CreateContext) for main window.\n");
+	SDL_GLContext mainGLContext = SDL_GL_CreateContext(mainWindow);
+	if ( ! mainGLContext) {
+		printf("ERROR: Unable to create a GL context (via SDL_GL_CreateContext), error = \"%s\".\n",
+			   SDL_GetError());
+		return 1;
+	}
+	printf("INFO: A GL context has been created for the main window (via SDL_GL_CreateContext).  (address = 0x%x)\n",
+		   (unsigned int)mainGLContext);
+	
 #pragma mark - Main Loop
 	// Sit in an endless loop, getting + logging events, drawing stuff, etc.
 	printf("INFO: Entering main loop.\n");
@@ -307,7 +327,7 @@ int main(int argc, char *argv[])
 		// Update the loop count.  This is always done once when the main loop
 		// iterates.
 		++loopCount;
-	
+		
 		// Retrieve all events in SDL's event queue, logging information about
 		// them.
 		SDL_Event event;
@@ -315,6 +335,10 @@ int main(int argc, char *argv[])
 			std::cout << "INFO: " << ConvertSDLEventTypeToString(event.type) <<
 				" received, loop count=" << loopCount << "\n";
 		}
+		
+		// This seems to be a necessary component of getting an iOS-based SDL
+		// app to process touch events.
+		SDL_GL_SwapWindow(mainWindow);
 		
 		// Wait a bit, just in case the OS needs time to process things.
 		SDL_Delay(1);
