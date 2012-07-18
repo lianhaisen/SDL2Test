@@ -131,6 +131,72 @@ std::string ConvertSDLEventTypeToString(Uint32 type) {
 	}
 }
 
+std::string ConvertSDLMouseStateToString(Uint8 flags) {
+	std::stringstream ss;
+	Uint8 decodedFlags = 0;
+	
+	if (flags & SDL_BUTTON_LMASK) { ss << "SDL_BUTTON_LMASK | "; decodedFlags |= SDL_BUTTON_LMASK; }
+	if (flags & SDL_BUTTON_MMASK) { ss << "SDL_BUTTON_MMASK | "; decodedFlags |= SDL_BUTTON_MMASK; }
+	if (flags & SDL_BUTTON_RMASK) { ss << "SDL_BUTTON_RMASK | "; decodedFlags |= SDL_BUTTON_RMASK; }
+	if (flags & SDL_BUTTON_X1MASK) { ss << "SDL_BUTTON_X1MASK | "; decodedFlags |= SDL_BUTTON_X1MASK; }
+	if (flags & SDL_BUTTON_X2MASK) { ss << "SDL_BUTTON_X2MASK | "; decodedFlags |= SDL_BUTTON_X2MASK; }
+	
+	if (flags != decodedFlags) {
+		ss << "... | ";
+	}
+	
+	std::string result = ss.str();
+	if ( ! result.empty()) {
+		result = result.substr(0, result.size() - 3);
+	}
+	
+	return result;
+}
+
+std::string ConvertSDLMouseButtonToString(Uint8 button) {
+	switch (button) {
+		case SDL_BUTTON_LEFT: return "SDL_BUTTON_LEFT";
+		case SDL_BUTTON_MIDDLE: return "SDL_BUTTON_MIDDLE";
+		case SDL_BUTTON_RIGHT: return "SDL_BUTTON_RIGHT";
+		case SDL_BUTTON_X1: return "SDL_BUTTON_X1";
+		case SDL_BUTTON_X2: return "SDL_BUTTON_X2";
+		default:
+			return (boost::format("<unknown SDL button: 0x%x>") % button).str();
+	}
+}
+
+struct ExtraInfoOnSDLEvent {
+	ExtraInfoOnSDLEvent(const SDL_Event & event) : event(event) {}
+	const SDL_Event & event;
+};
+
+std::ostream & operator<<(std::ostream & stream, const ExtraInfoOnSDLEvent & e) {
+	switch (e.event.type) {
+		case SDL_MOUSEMOTION:
+			stream
+				<< "windowID=" << e.event.motion.windowID << ", "
+				<< "state=(" << ConvertSDLMouseStateToString(e.event.motion.state) << "), "
+				<< "x=" << e.event.motion.x << ", "
+				<< "y=" << e.event.motion.y << ", "
+				<< "xrel=" << e.event.motion.xrel << ", "
+				<< "yrel=" << e.event.motion.yrel << " ";
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+			stream
+				<< "windowID=" << e.event.motion.windowID << ", "
+				<< "button=" << ConvertSDLMouseButtonToString(e.event.button.button) << ", "
+				<< "state=(" << ConvertSDLMouseStateToString(e.event.button.state) << "), "
+				<< "x=" << e.event.motion.x << ", "
+				<< "y=" << e.event.motion.y << " ";
+			break;
+		default:
+			stream << "... ";
+	}
+	
+	return stream;
+}
+
 int main(int argc, char *argv[])
 {
 	// When cycling through display modes, one will be chosen as the one to
@@ -333,7 +399,8 @@ int main(int argc, char *argv[])
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			std::cout << "INFO: " << ConvertSDLEventTypeToString(event.type) <<
-				" received, loop count=" << loopCount << "\n";
+				" received, loop count=" << loopCount <<
+				", " << ExtraInfoOnSDLEvent(event) << "\n";
 		}
 		
 		// This seems to be a necessary component of getting an iOS-based SDL
