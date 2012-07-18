@@ -89,6 +89,28 @@ std::string ConvertSDLWindowFlagsToString(Uint32 flags) {
 	return result;
 }
 
+std::string ConvertSDLWindowEventIDToString(Uint8 eventID) {
+	switch (eventID) {
+		case SDL_WINDOWEVENT_NONE: return "SDL_WINDOWEVENT_NONE";
+		case SDL_WINDOWEVENT_SHOWN: return "SDL_WINDOWEVENT_SHOWN";
+		case SDL_WINDOWEVENT_HIDDEN: return "SDL_WINDOWEVENT_HIDDEN";
+		case SDL_WINDOWEVENT_EXPOSED: return "SDL_WINDOWEVENT_EXPOSED";
+		case SDL_WINDOWEVENT_MOVED: return "SDL_WINDOWEVENT_MOVED";
+		case SDL_WINDOWEVENT_RESIZED: return "SDL_WINDOWEVENT_RESIZED";
+		case SDL_WINDOWEVENT_SIZE_CHANGED: return "SDL_WINDOWEVENT_SIZE_CHANGED";
+		case SDL_WINDOWEVENT_MINIMIZED: return "SDL_WINDOWEVENT_MINIMIZED";
+		case SDL_WINDOWEVENT_MAXIMIZED: return "SDL_WINDOWEVENT_MAXIMIZED";
+		case SDL_WINDOWEVENT_RESTORED: return "SDL_WINDOWEVENT_RESTORED";
+		case SDL_WINDOWEVENT_ENTER: return "SDL_WINDOWEVENT_ENTER";
+		case SDL_WINDOWEVENT_LEAVE: return "SDL_WINDOWEVENT_LEAVE";
+		case SDL_WINDOWEVENT_FOCUS_GAINED: return "SDL_WINDOWEVENT_FOCUS_GAINED";
+		case SDL_WINDOWEVENT_FOCUS_LOST: return "SDL_WINDOWEVENT_FOCUS_LOST";
+		case SDL_WINDOWEVENT_CLOSE: return "SDL_WINDOWEVENT_CLOSE";
+		default:
+			return (boost::format("<unknown SDL window event id: 0x%x") % eventID).str();
+	}
+}
+
 std::string ConvertSDLEventTypeToString(Uint32 type) {
 	switch (type) {
 		case SDL_QUIT: return "SDL_QUIT";
@@ -172,6 +194,29 @@ struct ExtraInfoOnSDLEvent {
 
 std::ostream & operator<<(std::ostream & stream, const ExtraInfoOnSDLEvent & e) {
 	switch (e.event.type) {
+		case SDL_FINGERDOWN:
+		case SDL_FINGERMOTION:
+		case SDL_FINGERUP:
+			stream
+				<< "windowID=" << e.event.tfinger.windowID << ", "
+				<< "touchId=" << e.event.tfinger.touchId << ", "
+				<< "fingerId=" << e.event.tfinger.fingerId << ", "
+				<< "state=(" << ConvertSDLMouseStateToString(e.event.tfinger.state) << "), "
+				<< "x=" << e.event.tfinger.x << ", "
+				<< "y=" << e.event.tfinger.y << ", "
+				<< "dx=" << e.event.tfinger.dx << ", "
+				<< "dy=" << e.event.tfinger.dy << ", "
+				<< "pressure=" << e.event.tfinger.pressure << " ";
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+			stream
+				<< "windowID=" << e.event.motion.windowID << ", "
+				<< "button=" << ConvertSDLMouseButtonToString(e.event.button.button) << ", "
+				<< "state=(" << ConvertSDLMouseStateToString(e.event.button.state) << "), "
+				<< "x=" << e.event.button.x << ", "
+				<< "y=" << e.event.button.y << " ";
+			break;
 		case SDL_MOUSEMOTION:
 			stream
 				<< "windowID=" << e.event.motion.windowID << ", "
@@ -181,14 +226,12 @@ std::ostream & operator<<(std::ostream & stream, const ExtraInfoOnSDLEvent & e) 
 				<< "xrel=" << e.event.motion.xrel << ", "
 				<< "yrel=" << e.event.motion.yrel << " ";
 			break;
-		case SDL_MOUSEBUTTONDOWN:
-		case SDL_MOUSEBUTTONUP:
+		case SDL_WINDOWEVENT:
 			stream
-				<< "windowID=" << e.event.motion.windowID << ", "
-				<< "button=" << ConvertSDLMouseButtonToString(e.event.button.button) << ", "
-				<< "state=(" << ConvertSDLMouseStateToString(e.event.button.state) << "), "
-				<< "x=" << e.event.motion.x << ", "
-				<< "y=" << e.event.motion.y << " ";
+				<< "windowID=" << e.event.window.windowID << ", "
+				<< "event=" << ConvertSDLWindowEventIDToString(e.event.window.event) << ", "
+				<< "data1=" << e.event.window.data1 << ", "
+				<< "data2=" << e.event.window.data2 << " ";
 			break;
 		default:
 			stream << "... ";
