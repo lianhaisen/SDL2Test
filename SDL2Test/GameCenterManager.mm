@@ -32,8 +32,8 @@ static GameCenterManager * _sharedManager = nil;
 	}];
 }
 
-- (void) showLeaderboardsInUIWindow:(UIWindow *)window {
-	NSLog(@"INFO: Showing leaderboards in window 0x%x", (unsigned int)window);
+- (void) showLeaderboardsInViewController:(UIViewController *)viewController {
+	NSLog(@"INFO: Showing leaderboards in view controller 0x%x", (unsigned int)viewController);
 }
 
 @end

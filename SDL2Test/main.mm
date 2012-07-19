@@ -19,7 +19,6 @@
 #import "GameCenterManager.h"
 //#import "AppDelegate.h"
 
-
 static const char * ConvertPixelFormatToCString(Uint32 pixelFormat) {
 	switch (pixelFormat) {
 		case SDL_PIXELFORMAT_UNKNOWN: return "SDL_PIXELFORMAT_UNKNOWN";
@@ -251,6 +250,7 @@ std::ostream & operator<<(std::ostream & stream, const WindowWMInfoLogger & w) {
 #if TARGET_OS_IPHONE==1
 	stream
 		<< "(UIWindow *) window = " << w.info.info.uikit.window << ", "
+		<< "viewcontroller = " << w.info.info.uikit.viewcontroller << ", "
 		<< "window.rootViewController = " << w.info.info.uikit.window.rootViewController
 		<< " ";
 #else
@@ -489,7 +489,7 @@ int main(int argc, char *argv[])
 					   event.button.y >= 0 && event.button.y <= 100)
 			{
 				std::cout << "INFO: Showing Game Center Leaderboards.\n";
-				[[GameCenterManager sharedManager] showLeaderboardsInUIWindow:mainWindowWMInfo.info.uikit.window];
+				[[GameCenterManager sharedManager] showLeaderboardsInViewController:mainWindowWMInfo.info.uikit.viewcontroller];
 			}
 		}
 		
