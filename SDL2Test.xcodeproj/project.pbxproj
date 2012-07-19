@@ -16,6 +16,7 @@
 		754CEE0F15A78F8900ACA139 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEE0E15A78F8900ACA139 /* OpenGLES.framework */; };
 		754CEE1315A78FFE00ACA139 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEE1215A78FFE00ACA139 /* AudioToolbox.framework */; };
 		754CEE1515A7903100ACA139 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEE1415A7903100ACA139 /* QuartzCore.framework */; };
+		7561604715B79A1100D56B1D /* GameCenterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7561604615B79A1100D56B1D /* GameCenterManager.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		754CEE1015A78FF300ACA139 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		754CEE1215A78FFE00ACA139 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		754CEE1415A7903100ACA139 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7561604515B79A1100D56B1D /* GameCenterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCenterManager.h; sourceTree = "<group>"; };
+		7561604615B79A1100D56B1D /* GameCenterManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCenterManager.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +102,8 @@
 				754CEDF815A78E4A00ACA139 /* InfoPlist.strings */,
 				754CEDFB15A78E4A00ACA139 /* main.mm */,
 				754CEDFD15A78E4A00ACA139 /* SDL2Test-Prefix.pch */,
+				7561604515B79A1100D56B1D /* GameCenterManager.h */,
+				7561604615B79A1100D56B1D /* GameCenterManager.mm */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -166,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				754CEDFC15A78E4A00ACA139 /* main.mm in Sources */,
+				7561604715B79A1100D56B1D /* GameCenterManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

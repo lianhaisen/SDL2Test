@@ -15,6 +15,7 @@
 
 #include <SDL.h>
 
+#import "GameCenterManager.h"
 //#import "AppDelegate.h"
 
 
@@ -444,6 +445,14 @@ int main(int argc, char *argv[])
 			std::cout << "INFO: " << ConvertSDLEventTypeToString(event.type) <<
 				" received, loop count=" << loopCount <<
 				", " << ExtraInfoOnSDLEvent(event) << "\n";
+			
+			if (event.type == SDL_MOUSEBUTTONDOWN &&
+				event.button.x >= 0 && event.button.x <= 100 &&
+				event.button.y >= 0 && event.button.y <= 100)
+			{
+				std::cout << "INFO: Authenticating With Game Center.\n";
+				[[GameCenterManager sharedManager] authenticate];
+			}
 		}
 		
 		// This seems to be a necessary component of getting an iOS-based SDL
