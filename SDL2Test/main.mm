@@ -14,6 +14,7 @@
 #include <boost/format.hpp>
 
 #include <SDL.h>
+#include <SDL_syswm.h>
 
 #import "GameCenterManager.h"
 //#import "AppDelegate.h"
@@ -241,6 +242,21 @@ std::ostream & operator<<(std::ostream & stream, const ExtraInfoOnSDLEvent & e) 
 	return stream;
 }
 
+struct WindowWMInfoLogger {
+	WindowWMInfoLogger(SDL_SysWMinfo & wmInfo) : info(wmInfo) {}
+	SDL_SysWMinfo & info;
+};
+
+std::ostream & operator<<(std::ostream & stream, const WindowWMInfoLogger & w) {
+#if TARGET_OS_IPHONE==1
+	stream << "(UIWindow *) window = " << w.info.info.uikit.window << " ";
+#else
+	stream << "... ";
+#endif
+	
+	return stream;
+}
+
 int main(int argc, char *argv[])
 {
 	// When cycling through display modes, one will be chosen as the one to
@@ -408,6 +424,19 @@ int main(int argc, char *argv[])
 	
 	printf("INFO: The main SDL Window has been created (via SDL_CreateWindow).  (address = 0x%x)\n",
 		   (unsigned int)mainWindow);
+
+#pragma mark - Native Window Info
+	printf("INFO: Retrieving native window information on the main SDL window (via SDL_GetWindowWMInfo).\n");
+	SDL_SysWMinfo mainWindowWMInfo;
+	SDL_VERSION(&mainWindowWMInfo.version);
+	if ( ! SDL_GetWindowWMInfo(mainWindow, &mainWindowWMInfo)) {
+		printf("ERROR: Unable to get native window information on the main SDL window (via SDL_GetWindowWMInfo), error = \"%s\".\n",
+			   SDL_GetError());
+		return 1;
+	} else {
+		std::cout << "INFO: Native window info: " <<
+			WindowWMInfoLogger(mainWindowWMInfo) << "\n";
+	}
 	
 #pragma mark - GL Context Creation
 	// Creating a GL context (via SDL_GL_CreateContext) and updating its window
