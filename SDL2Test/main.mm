@@ -260,12 +260,52 @@ std::ostream & operator<<(std::ostream & stream, const WindowWMInfoLogger & w) {
 	return stream;
 }
 
+// Various vables needed when iterating the main loop:
+SDL_DisplayMode chosenDisplayMode;
+SDL_SysWMinfo mainWindowWMInfo;
+SDL_Window * mainWindow = 0;
+unsigned long long loopCount = 0;
+
+// Iterates the main loop once:
+void IterateMainLoop(void * userdata) {
+	// Update the loop count.  This is always done once when the main loop
+	// iterates.
+	++loopCount;
+	
+	// Retrieve all events in SDL's event queue, logging information about
+	// them.
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		std::cout << "INFO: " << ConvertSDLEventTypeToString(event.type)
+			<< " received, loop count = " << loopCount
+			<< ", " << ExtraInfoOnSDLEvent(event) << "\n";
+		
+		if (event.type == SDL_MOUSEBUTTONDOWN &&
+			event.button.x >= 0 && event.button.x <= 100 &&
+			event.button.y >= 0 && event.button.y <= 100)
+		{
+			std::cout << "INFO: Authenticating With Game Center.\n";
+			[[GameCenterManager sharedManager] authenticate];
+		} else if (event.type == SDL_MOUSEBUTTONDOWN &&
+				   event.button.x >= (chosenDisplayMode.w - 100) && event.button.x <= chosenDisplayMode.w &&
+				   event.button.y >= 0 && event.button.y <= 100)
+		{
+			std::cout << "INFO: Showing Game Center Leaderboards.\n";
+			[[GameCenterManager sharedManager] showLeaderboardsInViewController:mainWindowWMInfo.info.uikit.viewcontroller];
+		}
+	}
+	
+	// This seems to be a necessary component of getting an iOS-based SDL
+	// app to process touch events.
+	SDL_GL_SwapWindow(mainWindow);
+}
+
 int main(int argc, char *argv[])
 {
 	// When cycling through display modes, one will be chosen as the one to
 	// initialize a window with.  A copy of its SDL_DisplayMode struct will
 	// be made.
-	SDL_DisplayMode chosenDisplayMode;
+//	SDL_DisplayMode chosenDisplayMode;
 	memset(&chosenDisplayMode, 0, sizeof(chosenDisplayMode));
 	bool wasDisplayModeChosen = false;
 	const int videoDisplayIndexToChoose = 0;
@@ -415,10 +455,10 @@ int main(int argc, char *argv[])
 		   windowTitle, windowX, windowY, chosenDisplayMode.w,
 		   chosenDisplayMode.h,
 		   stringifiedWindowFlags.c_str());
-	SDL_Window * mainWindow = SDL_CreateWindow(windowTitle,
-											   0, 0,
-											   chosenDisplayMode.w, chosenDisplayMode.h,
-											   windowFlags);
+	mainWindow = SDL_CreateWindow(windowTitle,
+								0, 0,
+								chosenDisplayMode.w, chosenDisplayMode.h,
+								windowFlags);
 	if ( ! mainWindow) {
 		printf("ERROR: Unable to create the main SDL window (via SDL_CreateWindow), error = \"%s\".\n",
 			   SDL_GetError());
@@ -430,7 +470,7 @@ int main(int argc, char *argv[])
 
 #pragma mark - Native Window Info
 	printf("INFO: Retrieving native window information on the main SDL window (via SDL_GetWindowWMInfo).\n");
-	SDL_SysWMinfo mainWindowWMInfo;
+//	SDL_SysWMinfo mainWindowWMInfo;
 	SDL_VERSION(&mainWindowWMInfo.version);
 	if ( ! SDL_GetWindowWMInfo(mainWindow, &mainWindowWMInfo)) {
 		printf("ERROR: Unable to get native window information on the main SDL window (via SDL_GetWindowWMInfo), error = \"%s\".\n",
@@ -463,43 +503,19 @@ int main(int argc, char *argv[])
 	
 #pragma mark - Main Loop
 	// Sit in an endless loop, getting + logging events, drawing stuff, etc.
+	loopCount = 0;
+	
+#if TARGET_OS_IPHONE == 1
+	SDL_iPhoneSetAnimationCallback(mainWindow, 1, IterateMainLoop, 0);
+#else
 	printf("INFO: Entering main loop.\n");
-	unsigned long long loopCount = 0;
 	while (true) {
-		// Update the loop count.  This is always done once when the main loop
-		// iterates.
-		++loopCount;
-		
-		// Retrieve all events in SDL's event queue, logging information about
-		// them.
-		SDL_Event event;
-		while (SDL_PollEvent(&event)) {
-			std::cout << "INFO: " << ConvertSDLEventTypeToString(event.type) <<
-				" received, loop count=" << loopCount <<
-				", " << ExtraInfoOnSDLEvent(event) << "\n";
-			
-			if (event.type == SDL_MOUSEBUTTONDOWN &&
-				event.button.x >= 0 && event.button.x <= 100 &&
-				event.button.y >= 0 && event.button.y <= 100)
-			{
-				std::cout << "INFO: Authenticating With Game Center.\n";
-				[[GameCenterManager sharedManager] authenticate];
-			} else if (event.type == SDL_MOUSEBUTTONDOWN &&
-					   event.button.x >= (chosenDisplayMode.w - 100) && event.button.x <= chosenDisplayMode.w &&
-					   event.button.y >= 0 && event.button.y <= 100)
-			{
-				std::cout << "INFO: Showing Game Center Leaderboards.\n";
-				[[GameCenterManager sharedManager] showLeaderboardsInViewController:mainWindowWMInfo.info.uikit.viewcontroller];
-			}
-		}
-		
-		// This seems to be a necessary component of getting an iOS-based SDL
-		// app to process touch events.
-		SDL_GL_SwapWindow(mainWindow);
-		
+		IterateMainLoop(&loopCount);
+
 		// Wait a bit, just in case the OS needs time to process things.
 		SDL_Delay(1);
 	}
+#endif
 	
 	return 0;
 }
