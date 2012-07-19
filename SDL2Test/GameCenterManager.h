@@ -11,4 +11,5 @@
 @interface GameCenterManager : NSObject
 + (GameCenterManager *) sharedManager;
 - (void) authenticate;
+- (void) showLeaderboardsInUIWindow:(UIWindow *)window;
 @end

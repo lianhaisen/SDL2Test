@@ -249,7 +249,10 @@ struct WindowWMInfoLogger {
 
 std::ostream & operator<<(std::ostream & stream, const WindowWMInfoLogger & w) {
 #if TARGET_OS_IPHONE==1
-	stream << "(UIWindow *) window = " << w.info.info.uikit.window << " ";
+	stream
+		<< "(UIWindow *) window = " << w.info.info.uikit.window << ", "
+		<< "window.rootViewController = " << w.info.info.uikit.window.rootViewController
+		<< " ";
 #else
 	stream << "... ";
 #endif
@@ -481,6 +484,12 @@ int main(int argc, char *argv[])
 			{
 				std::cout << "INFO: Authenticating With Game Center.\n";
 				[[GameCenterManager sharedManager] authenticate];
+			} else if (event.type == SDL_MOUSEBUTTONDOWN &&
+					   event.button.x >= (chosenDisplayMode.w - 100) && event.button.x <= chosenDisplayMode.w &&
+					   event.button.y >= 0 && event.button.y <= 100)
+			{
+				std::cout << "INFO: Showing Game Center Leaderboards.\n";
+				[[GameCenterManager sharedManager] showLeaderboardsInUIWindow:mainWindowWMInfo.info.uikit.window];
 			}
 		}
 		
