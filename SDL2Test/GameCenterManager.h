@@ -7,9 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GameKit/GameKit.h>
 
-@interface GameCenterManager : NSObject
+@interface GameCenterManager : NSObject <GKLeaderboardViewControllerDelegate>
 + (GameCenterManager *) sharedManager;
 - (void) authenticate;
 - (void) showLeaderboardsInViewController:(UIViewController *)viewController;
+
+// GKLeaderboardViewControllerDelegate methods
+- (void) leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController;
 @end

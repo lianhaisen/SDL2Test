@@ -34,6 +34,24 @@ static GameCenterManager * _sharedManager = nil;
 
 - (void) showLeaderboardsInViewController:(UIViewController *)viewController {
 	NSLog(@"INFO: Showing leaderboards in view controller 0x%x", (unsigned int)viewController);
+	GKLeaderboardViewController * leaderboardVC = [[GKLeaderboardViewController alloc] init];
+	leaderboardVC.leaderboardDelegate = self;
+//	leaderboardVC.category = @"com.happyhydra.SDL2Test.Main";
+	[viewController presentModalViewController:leaderboardVC animated:YES];
+}
+
+- (void) leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController {
+	NSLog(@"INFO: Game Center Leaderboard view controller is done (%@).", NSStringFromSelector(_cmd));
+
+	UIViewController * presentingViewController = nil;
+	if ([viewController respondsToSelector:@selector(presentingViewController)]) {
+		presentingViewController = viewController.presentingViewController;
+	} else {
+		presentingViewController = viewController.parentViewController;
+	}
+	if (presentingViewController) {
+		[presentingViewController dismissModalViewControllerAnimated:YES];
+	}
 }
 
 @end
