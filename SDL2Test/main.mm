@@ -16,6 +16,10 @@
 #include <SDL.h>
 #include <SDL_syswm.h>
 
+#if TARGET_OS_IPHONE==1
+#include <SDL_opengles.h>
+#endif
+
 #import "GameCenterManager.h"
 //#import "AppDelegate.h"
 
@@ -260,11 +264,89 @@ std::ostream & operator<<(std::ostream & stream, const WindowWMInfoLogger & w) {
 	return stream;
 }
 
+std::string ConvertSDLRendererFlagsToString(Uint32 flags) {
+	std::stringstream ss;
+	Uint32 decodedFlags = 0;
+	
+	if (flags & SDL_RENDERER_SOFTWARE) { ss << "SDL_RENDERER_SOFTWARE | "; decodedFlags |= SDL_RENDERER_SOFTWARE; }
+	if (flags & SDL_RENDERER_ACCELERATED) { ss << "SDL_RENDERER_ACCELERATED | "; decodedFlags |= SDL_RENDERER_ACCELERATED; }
+	if (flags & SDL_RENDERER_PRESENTVSYNC) { ss << "SDL_RENDERER_PRESENTVSYNC | "; decodedFlags |= SDL_RENDERER_PRESENTVSYNC; }
+	if (flags & SDL_RENDERER_TARGETTEXTURE) { ss << "SDL_RENDERER_TARGETTEXTURE | "; decodedFlags |= SDL_RENDERER_TARGETTEXTURE; }
+	
+	if (flags != decodedFlags) {
+		ss << "... | ";
+	}
+	
+	std::string result = ss.str();
+	if ( ! result.empty()) {
+		result = result.substr(0, result.size() - 3);
+	}
+	
+	return result;
+}
+
+struct RendererInfoLogger {
+	RendererInfoLogger(SDL_RendererInfo & renderInfo) : info(renderInfo) {}
+	SDL_RendererInfo & info;
+};
+
+std::ostream & operator<<(std::ostream & stream, const RendererInfoLogger & r) {
+	stream
+		<< "name = " << r.info.name << ", "
+		<< "flags = (" << ConvertSDLRendererFlagsToString(r.info.flags) << "), "
+		<< "num texture formats = " << r.info.num_texture_formats << ", ";
+	
+	for (Uint32 textureFormatIndex = 0; textureFormatIndex < r.info.num_texture_formats; ++textureFormatIndex) {
+		stream
+			<< "texture format " << textureFormatIndex << " = "
+			<< ConvertPixelFormatToCString(r.info.texture_formats[textureFormatIndex]) << ", ";
+	}
+	
+	stream
+		<< "max texture width = " << r.info.max_texture_width << ", "
+		<< "max texture height = " << r.info.max_texture_height << " ";
+	
+	return stream;
+}
+
 // Various vables needed when iterating the main loop:
 SDL_DisplayMode chosenDisplayMode;
 SDL_SysWMinfo mainWindowWMInfo;
 SDL_Window * mainWindow = 0;
 unsigned long long loopCount = 0;
+SDL_Renderer * mainRenderer = 0;
+
+/*
+typedef struct {
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+} Vertex3D;
+
+static inline Vertex3D Vertex3DMake(CGFloat inX, CGFloat inY, CGFloat inZ)
+{
+    Vertex3D ret;
+    ret.x = inX;
+    ret.y = inY;
+    ret.z = inZ;
+    return ret;
+}
+
+typedef struct {
+    Vertex3D v1;
+    Vertex3D v2;
+    Vertex3D v3;
+} Triangle3D;
+
+static inline Triangle3D Triangle3DMake(Vertex3D inV1, Vertex3D inV2, Vertex3D inV3)
+{
+	Triangle3D ret;
+	ret.v1 = inV1;
+	ret.v2 = inV2;
+	ret.v3 = inV3;
+	return ret;
+}
+*/
 
 // Iterates the main loop once:
 void IterateMainLoop(void * userdata) {
@@ -295,9 +377,22 @@ void IterateMainLoop(void * userdata) {
 		}
 	}
 	
-	// This seems to be a necessary component of getting an iOS-based SDL
-	// app to process touch events.
-	SDL_GL_SwapWindow(mainWindow);
+	// Clear the screen, then draw an animated rectangle, to indicate that
+	// the app is actively running.
+	SDL_SetRenderDrawColor(mainRenderer, 0, 0, 0, 255);
+	SDL_RenderClear(mainRenderer);
+	SDL_SetRenderDrawColor(mainRenderer, 255, 0, 0, 255);
+	SDL_Rect aRect;
+	aRect.x = (SDL_GetTicks() / 10) % (chosenDisplayMode.w / 2);
+	aRect.y = 0;
+	aRect.w = (chosenDisplayMode.w / 2);
+	aRect.h = (chosenDisplayMode.h / 2);
+	SDL_RenderDrawRect(mainRenderer, &aRect);
+
+	// Present the renderer.  For OpenGL ES renderers, this will call
+	// SDL_GL_SwapWindow at some point, which seems to be a necessary component
+	// of getting an iOS-based SDL app to process touch events.
+	SDL_RenderPresent(mainRenderer);
 }
 
 int main(int argc, char *argv[])
@@ -481,7 +576,7 @@ int main(int argc, char *argv[])
 			WindowWMInfoLogger(mainWindowWMInfo) << "\n";
 	}
 	
-#pragma mark - GL Context Creation
+#pragma mark - Renderer Creation
 	// Creating a GL context (via SDL_GL_CreateContext) and updating its window
 	// (via SDL_GL_SwapWindow) is needed to get events working in an iOS-based
 	// SDL app (as of this writing on July 15, 2012).  This isn't to say there
@@ -490,16 +585,43 @@ int main(int argc, char *argv[])
 	// these calls, and only attempting to poll for events (via SDL_PollEvent)
 	// does not work for most event types.  Window events get received, but not
 	// touch events.
+	//
+	// A GL context will likely be created via an SDL renderer.
 	
-	printf("INFO: Creating GL context (via SDL_GL_CreateContext) for main window.\n");
-	SDL_GLContext mainGLContext = SDL_GL_CreateContext(mainWindow);
-	if ( ! mainGLContext) {
-		printf("ERROR: Unable to create a GL context (via SDL_GL_CreateContext), error = \"%s\".\n",
+	int numRenderDrivers = SDL_GetNumRenderDrivers();
+	if (numRenderDrivers <= 0) {
+		printf("ERROR: Unable to retrieve the number of render drivers (via SDL_GetNumRenderDrivers), error = \"%s\".\n",
 			   SDL_GetError());
 		return 1;
 	}
-	printf("INFO: A GL context has been created for the main window (via SDL_GL_CreateContext).  (address = 0x%x)\n",
-		   (unsigned int)mainGLContext);
+	printf("INFO: Number of render drivers: %d\n", numRenderDrivers);
+	
+	printf("INFO: Retrieving information on each render driver (via SDL_GetRenderDriverInfo):\n");
+	SDL_RendererInfo rendererInfo;
+	for (int renderDriverIndex = 0; renderDriverIndex < numRenderDrivers; ++renderDriverIndex) {
+		if (SDL_GetRenderDriverInfo(renderDriverIndex, &rendererInfo) != 0) {
+			printf("WARNING: Unable to get info on render driver #%d (via SDL_GetRenderDriverInfo), error = \"%s\".\n",
+				   renderDriverIndex, SDL_GetError());
+		} else {
+			std::cout << "INFO: Renderer #" << renderDriverIndex << ": " <<
+				RendererInfoLogger(rendererInfo) << "\n";
+		}
+	}
+	printf("INFO: Letting SDL pick a renderer (via SDL_CreateRenderer, with index = -1 and flags = 0).\n");
+	mainRenderer = SDL_CreateRenderer(mainWindow, -1, 0);
+	if ( ! mainRenderer) {
+		printf("ERROR: Unable to create a renderer (via SDL_CreateRenderer), error = \"%s\".\n",
+			   SDL_GetError());
+		return 1;
+	}
+	
+	if (SDL_GetRendererInfo(mainRenderer, &rendererInfo) != 0) {
+		printf("WARNING: A renderer was successfully created (via SDL_CreateRenderer), however information on it could not be retrieved (via SDL_GetRendererInfo), error = \"%s\".\n",
+			   SDL_GetError());
+	} else {
+		printf("INFO: A renderer was successfully created (via SDL_CreateRenderer).  Driver name = \"%s\".\n",
+			   rendererInfo.name);
+	}
 	
 #pragma mark - Main Loop
 	// Sit in an endless loop, getting + logging events, drawing stuff, etc.

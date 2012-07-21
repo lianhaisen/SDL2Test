@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		752A83C615BB1AF50069A1F9 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 752A83C515BB1AF50069A1F9 /* Default@2x.png */; };
 		754CEDF015A78E4A00ACA139 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEDEF15A78E4A00ACA139 /* UIKit.framework */; };
 		754CEDF215A78E4A00ACA139 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEDF115A78E4A00ACA139 /* Foundation.framework */; };
 		754CEDF415A78E4A00ACA139 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754CEDF315A78E4A00ACA139 /* CoreGraphics.framework */; };
@@ -21,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		752A83C515BB1AF50069A1F9 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		752A83C815BB1AFB0069A1F9 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		754CEDEB15A78E4A00ACA139 /* SDL2Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDL2Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		754CEDEF15A78E4A00ACA139 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		754CEDF115A78E4A00ACA139 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -61,6 +64,8 @@
 		754CEDE015A78E4A00ACA139 = {
 			isa = PBXGroup;
 			children = (
+				752A83C815BB1AFB0069A1F9 /* Default.png */,
+				752A83C515BB1AF50069A1F9 /* Default@2x.png */,
 				7561604915B79B2600D56B1D /* GameKit.framework */,
 				754CEE1415A7903100ACA139 /* QuartzCore.framework */,
 				754CEE1215A78FFE00ACA139 /* AudioToolbox.framework */,
@@ -164,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				754CEDFA15A78E4A00ACA139 /* InfoPlist.strings in Resources */,
+				752A83C615BB1AF50069A1F9 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
